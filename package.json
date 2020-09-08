@@ -2,6 +2,7 @@
   "name": "m5spiombino",
   "version": "1.0.0",
   "private": true,
+  "proxy": "http://localhost:4000",
   "scripts": {
     "start": "node ./bin/www",
     "production": "node ./bin/www"
