@@ -1,0 +1,21 @@
+.postDetail {
+    margin-bottom: 70px;
+    padding: 10px;
+}
+
+.MuiCheckbox-colorSecondary.Mui-checked {
+    color: #fcb02d!important;
+}
+
+.noAuth {
+    margin-top: 8px;
+}
+
+.auth {
+    margin-top: 8px;
+}
+
+.newComment {
+    display: flex;
+    
+}

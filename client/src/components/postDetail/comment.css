@@ -1,0 +1,24 @@
+.comment {
+    text-align: left;
+}
+
+.MuiCardContent-root {
+    padding-top: 0px!important;
+    padding-bottom: 0px!important;
+}
+
+.MuiIconButton-root {
+    color: #fcb02d!important;
+}
+
+.bottomCard {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.actions {
+    text-align: right;
+    justify-content: space-between;
+}

@@ -1,0 +1,31 @@
+.root {
+    flex-grow: 1;
+    margin-bottom: 65px;
+    color: #ffffff!important;
+}
+
+.appBar {
+    width: 100%;
+    color: #ffffff;
+    position: fixed!important;
+    top: 0;
+    background-color: #fbc02d!important;
+    margin-bottom: 25px;
+}
+
+.menuButton {
+    margin-right: 2;
+    color: #ffffff!important;
+}
+
+.MuiIconButton-root {
+    color: #ffffff!important;
+}
+
+.MuiToolbar-root {
+    justify-content: space-between!important;
+}
+
+.title {
+    flex-grow: 1;
+}

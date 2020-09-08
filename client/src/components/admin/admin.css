@@ -1,0 +1,67 @@
+.noResults {
+    text-align: center;
+    align-content: center;
+}
+
+.pagination {
+    display: flex;
+    flex-direction: initial;
+    bottom: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center
+}
+
+.allPosts {
+    padding: 12px;
+    margin-bottom: 80px;
+}
+
+.allEvents {
+    padding: 12px;
+    margin-bottom: 80px;
+}
+
+.allPolls {
+    padding: 12px;
+    margin-bottom: 80px;
+}
+
+.newPost {
+    padding: 20px;
+}
+
+.editor {
+    margin: 10px;
+    border: 1px solid gray;
+}
+
+.newEvent {
+    padding: 20px;
+}
+
+.post {
+    margin: 20px;
+}
+
+.event {
+    margin: 20px;
+}
+
+.poll {
+    margin: 20px;
+}
+
+.MuiCardActions-root {
+    display: inline!important;
+    justify-content: space-between;
+}
+
+.RichTextEditor__root___2QXK- {
+    text-align: unset;
+    min-height: 300px;
+}
+
+.MuiTableCell-root {
+    padding: 8px!important;
+}

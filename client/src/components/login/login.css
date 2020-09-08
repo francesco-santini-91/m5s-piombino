@@ -1,0 +1,34 @@
+.Mui-focused {
+    color: #fcb02d!important
+}
+
+.MuiGrid-container {
+    display: initial!important;
+    justify-content: center;
+    align-items: center;
+}
+
+.LoginButton {
+    color: #ffffff!important;
+    background-color: #fcb02d!important;
+}
+
+.RegisterButton {
+    color: #ffffff!important;
+    
+}
+
+.margin {
+    align-items: center;
+    margin-top: 0px!important;
+    margin: auto;
+    margin-bottom: 60px;
+}
+
+.username {
+    display: inline;
+}
+
+.password {
+    display: inline;
+}

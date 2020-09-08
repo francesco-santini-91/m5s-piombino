@@ -1,0 +1,22 @@
+.MuiTab-textColorSecondary.Mui-selected {
+    color: #f50057!important;
+}
+
+.PrivateTabIndicator-colorSecondary-3 {
+    background-color: #f50057!important;
+}
+
+.MuiTab-wrapper {
+    color: #fcb02d!important;
+}
+
+.MuiTab-textColorSecondary {
+    color: #f50057!important;
+}
+
+.MuiTab-root {
+    padding-top: 6px!important;
+    padding-right: 5px!important;
+    padding-left: 5px!important;
+    padding-bottom: 6px!important;
+}

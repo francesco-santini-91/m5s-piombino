@@ -1,0 +1,27 @@
+.profile {
+    text-align: center;
+    flex-grow: 1;
+    padding: 0px;
+    margin: auto;
+}
+
+.verified {
+    color: green;
+}
+
+.notVerified {
+    color: red;
+}
+
+.input {
+    display: none;
+}
+
+.button {
+    margin-top: 8px!important;
+    width: 250px;
+}
+
+.SendButton {
+    margin: 5px!important;
+}

@@ -1,0 +1,17 @@
+.footer {
+    background-color: lightgoldenrodyellow;
+    margin-bottom: 60px!important;
+    z-index: 9999;
+}
+
+.MuiBottomNavigation-root {
+    background-color: lightgoldenrodyellow!important;
+}
+
+.MuiBottomNavigationAction-root {
+    background-color: lightgoldenrodyellow!important;
+}
+
+.MuiBottomNavigationAction-root.Mui-selected {
+    color: crimson!important;
+}
