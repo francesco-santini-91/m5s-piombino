@@ -31,7 +31,7 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use('/static', express.static(path.join(__dirname, '/client/build', 'static')));
+app.use('/static', express.static(path.join(__dirname, '/build', 'static')));
 app.use(cors());
 
 app.use(function(errors, request, response, next) {
@@ -47,6 +47,6 @@ app.use('/server/login', loginRouter);
 app.use('/server/sign-s3', amazonS3Router);
 app.use('/server/homepageTabs', homepageTabsRouter);
 
-app.get('*', (request, response) => {response.sendFile(path.join(__dirname, 'client/build/index.html'))});
+app.get('*', (request, response) => {response.sendFile(path.join(__dirname, '/build/index.html'))});
 
 module.exports = app;
