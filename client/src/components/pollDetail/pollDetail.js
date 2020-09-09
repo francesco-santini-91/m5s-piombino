@@ -37,10 +37,10 @@ class PollDetail extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/polls/' + this.props.match.params.pollID)
+        await fetch('/server/polls/' + this.props.match.params.pollID)
         .then(response => response.json())
         .then((data) => this.setState({poll: data, loaded: true}))
-        .catch(console.log);
+        .catch(console.log('Errore!'));
         if(!this.state.poll.title) {
             this.setState({pollNotFound: true});
         }
@@ -68,8 +68,9 @@ class PollDetail extends Component {
             isBanned: isBanned
         });
         if(this.state.isAuthenticated === true) {
+            var _errors = false;
             let alreadyVoted = false;
-            await axios.post('http://localhost:4000/server/polls/' + this.props.match.params.pollID, {
+            await axios.post('/server/polls/' + this.props.match.params.pollID, {
                 token: this.state.token
             })
             .then(function(response) {
@@ -78,9 +79,9 @@ class PollDetail extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
+                _errors = true
             });
-            this.setState({alreadyVoted: alreadyVoted});
+            this.setState({alreadyVoted: alreadyVoted, errors: _errors});
         }
     }
 

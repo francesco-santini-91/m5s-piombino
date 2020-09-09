@@ -58,7 +58,7 @@ class Post extends Component {
         var unauthorized = false;
         var noResults = false;
         var _errors = false;
-        await axios.put('http://localhost:4000/server/posts/' + this.props.urlTitle, {
+        await axios.put('/server/posts/' + this.props.urlTitle, {
             token: this.props.token,
             content: JSON.stringify(convertToRaw(this.state.contentEdited.getCurrentContent()))
         })
@@ -74,7 +74,6 @@ class Post extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({
@@ -93,7 +92,7 @@ class Post extends Component {
         var deleted = false;
         var _errors = false;
         if(this.props.isSuperUser === true || this.props.username === this.props.author) {
-            await axios.patch('http://localhost:4000/server/posts/'+this.props.urlTitle, {
+            await axios.patch('/server/posts/'+this.props.urlTitle, {
                 token: this.props.token
             })
             .then(function(response) {
@@ -105,7 +104,6 @@ class Post extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({

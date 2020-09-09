@@ -21,7 +21,7 @@ class User {
             return userInfo;
         }
         else {
-            await axios.post('http://localhost:4000/server/login/auth', {
+            await axios.post('/server/login/auth', {
                 token: this.token
             })
             .then(response => {
@@ -37,7 +37,7 @@ class User {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
+                console.log('Errore!');
             });
             return userInfo;
         }

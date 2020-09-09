@@ -38,10 +38,10 @@ class EventDetail extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/events/' + this.props.match.params.eventID)
+        await fetch('/server/events/' + this.props.match.params.eventID)
         .then(response => response.json())
         .then((data) => this.setState({event: data, loaded: true}))
-        .catch(console.log);
+        .catch(console.log('Errore!'));
         if(!this.state.event.title) {
             this.setState({eventNotFound: true});
         }
@@ -68,9 +68,10 @@ class EventDetail extends Component {
             isSuperUser: isSuperUser,
             isBanned: isBanned
         });
+        var _errors = false;
         if(this.state.isAuthenticated === true) {
             let participation = false;
-            await axios.post('http://localhost:4000/server/events/' + this.props.match.params.eventID, {
+            await axios.post('/server/events/' + this.props.match.params.eventID, {
                 token: this.state.token
             })
             .then(function(response) {
@@ -79,9 +80,9 @@ class EventDetail extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
+                _errors = true;
             });
-            this.setState({participation: participation});
+            this.setState({participation: participation, errors: _errors});
         }
     }
 
@@ -94,7 +95,7 @@ class EventDetail extends Component {
             var participation = false;
             var noResults = false;
             var _errors = false;
-            await axios.post('http://localhost:4000/server/events/' + this.state.event._id + '/participate', {
+            await axios.post('/server/events/' + this.state.event._id + '/participate', {
                 token: this.state.token
             })
                 .then(function(response) {
@@ -106,7 +107,6 @@ class EventDetail extends Component {
                     }
                 })
                 .catch(function(errors) {
-                    console.log(errors);
                     _errors = true;
                 });
                 this.setState({

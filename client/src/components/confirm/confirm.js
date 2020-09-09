@@ -21,9 +21,8 @@ class Confirm extends Component {
         var userNotFound = false;
         var userAlreadyConfirmed = false;
         var _errors = false;
-        await axios.get('http://localhost:4000/server/login/confirm/' + this.props.match.params.username + this.props.location.search)
+        await axios.get('/server/login/confirm/' + this.props.match.params.username + this.props.location.search)
             .then(function(response) {
-                console.log(response)
                 if(response.data.confirmed) {
                     confirmed = true;
                 }
@@ -35,7 +34,6 @@ class Confirm extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({

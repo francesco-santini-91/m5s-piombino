@@ -61,7 +61,7 @@ class HomepageTabs extends Component {
         var unauthorized = false;
         var tabAlreadyExist = false;
         var _errors = false;
-        await axios.post('http://localhost:4000/server/homepageTabs/addTab', {
+        await axios.post('/server/homepageTabs/addTab', {
             token: this.props.token,
             title: this.state.title,
             content: JSON.stringify(convertToRaw(this.state.newTabContent.getCurrentContent()))
@@ -78,7 +78,6 @@ class HomepageTabs extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({
@@ -93,10 +92,10 @@ class HomepageTabs extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/homepageTabs')
+        await fetch('/server/homepageTabs')
         .then(response => response.json())
         .then((data) => this.setState({tabs: data, loaded: true}))
-        .catch(console.log);
+        .catch(console.log('Errore!'));
     }
 
     loading() {

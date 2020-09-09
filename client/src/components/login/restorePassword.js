@@ -72,7 +72,7 @@ class RestorePassword extends Component {
         var userNotFound = false;
         var unauthorized = false;
         var _errors = false;
-        await axios.post('http://localhost:4000/server/users/restorePassword', {
+        await axios.post('/server/users/restorePassword', {
             username: this.state.username,
             token: this.state.token,
             password: this.state.password1
@@ -89,7 +89,6 @@ class RestorePassword extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({

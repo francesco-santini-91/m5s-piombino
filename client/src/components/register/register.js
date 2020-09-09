@@ -138,7 +138,7 @@ class Register extends Component {
                 var registered = false;
                 var userAlreadyExist = false;
                 var _errors = false;
-                await axios.post('http://localhost:4000/server/users/register', {
+                await axios.post('/server/users/register', {
                     username: this.state.username,
                     password: this.state.password1,
                     name: this.state.name,
@@ -155,7 +155,6 @@ class Register extends Component {
                     }
                 })
                 .catch(function(errors) {
-                    console.log(errors);        //  <-----------------------------------------------------
                     _errors = true;       
                 });
                 if(registered === true) {

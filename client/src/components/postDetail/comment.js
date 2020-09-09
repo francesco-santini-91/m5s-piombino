@@ -63,13 +63,24 @@ class Comment extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/users/' + this.props.userID)
-        .then(response => response.json())
-        .then((data) => this.setState({user: data, loaded: true}))
-        .catch(console.log);
-        if(this.props._username !== "") {
-            let liked = false;
-            await axios.post('http://localhost:4000/server/posts/' + this.props.urlTitle + '/' + this.props.commentID + '/verifyLike', {
+        var liked = false;
+        var loaded = false;
+        var user = {};
+        var _errors = false;
+        var _userID = this.props._userID;
+        await axios.get('/server/users/' + this.props.userID)
+        .then(function(response) {
+            if(response.data !== null) {
+                user = response.data;
+                loaded = true;
+            }
+        })
+        .catch(function(errors) {
+            _errors = true;
+        });
+        this.setState({user: user, loaded: loaded});
+        if(this.props.isAuthenticated === true) {
+            await axios.post('/server/posts/' + this.props.urlTitle + '/' + this.props.commentID + '/verifyLike', {
                 userID: this.props._userID
             })
             .then(function(response) {
@@ -78,9 +89,9 @@ class Comment extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
+                _errors = true;
             });
-            this.setState({liked: liked});
+            this.setState({liked: liked, errors: _errors});
         }
     }
 
@@ -89,7 +100,7 @@ class Comment extends Component {
             var liked = false;
             var noResults = false;
             var _errors = false;
-            await axios.post('http://localhost:4000/server/posts/' + this.props.urlTitle + '/' + this.props.commentID + '/like', {
+            await axios.post('/server/posts/' + this.props.urlTitle + '/' + this.props.commentID + '/like', {
                 userID: this.props._userID
             })
                 .then(function(response) {
@@ -101,7 +112,6 @@ class Comment extends Component {
                     }
                 })
                 .catch(function(errors) {
-                    console.log(errors);
                     _errors = true;
                 });
                 this.setState({
@@ -123,7 +133,7 @@ class Comment extends Component {
             var unauthorized = false;
             var noResults = false;
             var _errors = false;
-            await axios.put('http://localhost:4000/server/posts/' + this.props.urlTitle + '/' + this.props.commentID, {
+            await axios.put('/server/posts/' + this.props.urlTitle + '/' + this.props.commentID, {
                 token: this.props.token,
                 comment: JSON.stringify(convertToRaw(this.state.commentEdited.getCurrentContent()))
             })
@@ -139,7 +149,6 @@ class Comment extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({
@@ -159,7 +168,7 @@ class Comment extends Component {
         var unauthorized = false;
         var noResults = false;
         var _errors = false;
-        await axios.patch('http://localhost:4000/server/posts/' + this.props.urlTitle + '/' + this.props.commentID, {
+        await axios.patch('/server/posts/' + this.props.urlTitle + '/' + this.props.commentID, {
             token: this.props.token
         })
         .then(function(response) {
@@ -174,7 +183,6 @@ class Comment extends Component {
             }
         })
         .then(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({

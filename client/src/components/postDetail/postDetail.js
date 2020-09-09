@@ -50,19 +50,18 @@ class PostDetail extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/posts/' + this.props.match.params.urlTitle)
+        await fetch('/server/posts/' + this.props.match.params.urlTitle)
         .then(response => response.json())
-        .then((data) => {
-            this.setState({post: data, loaded: true});
-        })
-        .catch(console.log);
+        .then((data) => this.setState({post: data, loaded: true}))
+        .catch((errors) => console.log(errors));
         if(this.state.post.noResults === true) {
             this.setState({postNotFound: true});
         }
         else {
             this.setState({content: convertFromRaw(JSON.parse(this.state.post.content))});
         }
-        var auth, userID, username, avatar, isConfirmed, isAdmin, isSuperUser, isBanned;
+        if(this.state.loaded === true) {
+            var auth, userID, username, avatar, isConfirmed, isAdmin, isSuperUser, isBanned;
         var _user = new user(localStorage.getItem('t'));
         await _user.isAuthenticated().then(function(result) {
             auth = result.authorized;
@@ -87,7 +86,8 @@ class PostDetail extends Component {
         });
         if(this.state.isAuthenticated === true) {
             let liked = false;
-            await axios.post('http://localhost:4000/server/posts/' + this.props.match.params.urlTitle + '/verifyLike', {
+            var _errors = false;
+            await axios.post('/server/posts/' + this.props.match.params.urlTitle + '/verifyLike', {
                 userID: this.state.userID
             })
             .then(function(response) {
@@ -96,9 +96,10 @@ class PostDetail extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
+                _errors = true;
             });
-            this.setState({liked: liked});
+            this.setState({liked: liked, errors: _errors});
+        }
         }
     }
 
@@ -119,7 +120,7 @@ class PostDetail extends Component {
             var liked = false;
             var noResults = false;
             var _errors = false;
-            await axios.post('http://localhost:4000/server/posts/' + this.state.post.urlTitle + '/like', {
+            await axios.post('/server/posts/' + this.state.post.urlTitle + '/like', {
                 userID: this.state.userID
             })
                 .then(function(response) {
@@ -131,7 +132,6 @@ class PostDetail extends Component {
                     }
                 })
                 .catch(function(errors) {
-                    console.log(errors);
                     _errors = true;
                 });
                 this.setState({
@@ -153,7 +153,7 @@ class PostDetail extends Component {
             var noResults = false;
             var unauthorized = false;
             var _errors = false;
-            await axios.post('http://localhost:4000/server/posts/' + this.state.post.urlTitle + '/comment', {
+            await axios.post('/server/posts/' + this.state.post.urlTitle + '/comment', {
                 token: this.state.token,
                 comment: JSON.stringify(convertToRaw(this.state.comment.getCurrentContent()))
             })
@@ -169,7 +169,6 @@ class PostDetail extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({
@@ -270,6 +269,7 @@ class PostDetail extends Component {
                                                 user={comment.user}
                                                 content={comment.content}
                                                 likes={comment.likes.length}
+                                                isAuthenticated={this.state.isAuthenticated}
                                                 _username={this.state.username}
                                                 _userID={this.state.userID}
                                                 _isAdmin={this.state.isAdmin}

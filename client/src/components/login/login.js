@@ -50,7 +50,7 @@ class Login extends Component {
         var userNotFound = false;
         var wrongPassword = false;
         var errors = false;
-        await axios.post('http://localhost:4000/server/login', {
+        await axios.post('/server/login', {
             usernameOrEmail: this.state.usernameOrEmail,
             password: this.state.password
         })
@@ -70,7 +70,6 @@ class Login extends Component {
             }
         })
         .catch(function(error) {
-            console.log(error);
             errors = true;         //  <--------------------------------------------------------------
         });
         if(authenticated === true) {

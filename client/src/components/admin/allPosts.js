@@ -22,14 +22,14 @@ class AllPosts extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/posts'+this.props.location.search)
+        await fetch('/server/posts'+this.props.location.search)
         .then(response => response.json())
         .then((data) => this.setState({posts: data}))
-        .catch(console.log);
-        await fetch('http://localhost:4000/server/posts/numberOfPosts')
+        .catch(console.log('Errore!'));
+        await fetch('/server/posts/numberOfPosts')
         .then(response => response.json())
         .then((data) => this.setState({total: data.totalPosts}))
-        .catch(console.log);
+        .catch(console.log('Errore!'));
         this.setState({loaded: true});
     }
 

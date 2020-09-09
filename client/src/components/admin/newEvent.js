@@ -55,7 +55,7 @@ class NewEvent extends Component {
             this.setState({noFileSelected: true})
         }
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:4000/server/sign-s3?file-name=' + file.name + '&file-type=' + file.type);
+        xhr.open('GET', '/server/sign-s3?file-name=' + file.name + '&file-type=' + file.type);
         xhr.onreadystatechange = () => {
             if(xhr.readyState === 4) {
                 if(xhr.status === 200) {
@@ -117,10 +117,10 @@ class NewEvent extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/events/numberOfAllEvents')
+        await fetch('/server/events/numberOfAllEvents')
         .then(response => response.json())
         .then((data) => this.setState({id: data.totalEvents}))
-        .catch(console.log);
+        .catch(console.log('Errore!'));
     }
 
     async save() {
@@ -129,7 +129,7 @@ class NewEvent extends Component {
             var eventAlreadyExist = false;
             var unauthorized = false;
             var _errors = false;
-            await axios.post('http://localhost:4000/server/events/newEvent', {
+            await axios.post('/server/events/newEvent', {
                 token: this.props.token,
                 id: this.state.id,
                 title: this.state.title,
@@ -150,7 +150,6 @@ class NewEvent extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({

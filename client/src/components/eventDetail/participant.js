@@ -17,10 +17,10 @@ class Participant extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/users/' + this.props.userID)
+        await fetch('/server/users/' + this.props.userID)
             .then(response => response.json())
             .then((data) => this.setState({user: data, loaded: true}))
-            .catch(console.log);
+            .catch(console.log('Errore!'));
             if(!this.state.user.username) {
                 this.setState({userNotFound: true})
             }

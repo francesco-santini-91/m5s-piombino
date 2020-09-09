@@ -32,7 +32,7 @@ class ForgotPassword extends Component {
         var sended = false;
         var userNotFound = false;
         var _errors = false;
-        await axios.post('http://localhost:4000/server/users/resetPassword', {
+        await axios.post('/server/users/resetPassword', {
             email: this.state.email
         })
         .then(function(response) {
@@ -44,7 +44,6 @@ class ForgotPassword extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({

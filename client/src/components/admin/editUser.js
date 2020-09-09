@@ -61,7 +61,7 @@ class EditUser extends Component {
         var unauthorized = false;
         var noResults = false;
         var _errors = false;
-        await axios.post('http://localhost:4000/server/users/' + this.props.match.params.userID, {
+        await axios.post('/server/users/' + this.props.match.params.userID, {
             token: this.props.token
         })
         .then(function(response) {
@@ -79,7 +79,6 @@ class EditUser extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
             loaded = true;
         });
@@ -102,7 +101,7 @@ class EditUser extends Component {
         var unauthorized = false;
         var noResults = false;
         var _errors = false;
-        await axios.put('http://localhost:4000/server/users/' + this.state.user._id, {
+        await axios.put('/server/users/' + this.state.user._id, {
             token: this.props.token,
             email: this.state.email,
             isConfirmed: this.state.isConfirmed,
@@ -122,7 +121,6 @@ class EditUser extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({

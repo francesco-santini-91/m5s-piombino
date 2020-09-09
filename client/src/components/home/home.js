@@ -30,10 +30,10 @@ class Home extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/homepageTabs')
+        await fetch('/server/homepageTabs')
         .then(response => response.json())
         .then((data) => this.setState({tabs: data, loaded: true}))
-        .catch(console.log());
+        .catch(console.log('Errore!'));
     }
 
     changeTab(content) {

@@ -64,7 +64,8 @@ class Profile extends Component {
 
     async componentDidMount() {
         var avatar, name, surname;
-        await axios.post('http://localhost:4000/server/users/' + this.props.userID, {
+        var _errors = false;
+        await axios.post('/server/users/' + this.props.userID, {
             token: this.props.token
         })
         .then(function(response) {
@@ -73,12 +74,13 @@ class Profile extends Component {
             surname = response.data.surname;
         })
         .catch(function(errors) {
-            console.log(errors);
+            _errors = true;
         });
         this.setState({
             avatar: avatar,
             name: name,
-            surname: surname
+            surname: surname,
+            errors: _errors
         });
     }
 
@@ -87,7 +89,7 @@ class Profile extends Component {
         var noResults = false;
         var unauthorized = false;
         var _errors = false;
-        await axios.post('http://localhost:4000/server/users/resend', {
+        await axios.post('/server/users/resend', {
             token: this.props.token
         })
         .then(function(response) {
@@ -102,7 +104,6 @@ class Profile extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({
@@ -128,13 +129,13 @@ class Profile extends Component {
             this.setState({noFileSelected: true})
         }
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:4000/server/sign-s3?file-name=' + this.props.userID + '&file-type=' + file.type);
+        xhr.open('GET', '/server/sign-s3?file-name=' + this.props.userID + '.jpg&file-type=' + file.type);
         xhr.onreadystatechange = () => {
             if(xhr.readyState === 4) {
                 if(xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
                     const xhr2 = new XMLHttpRequest();
-                    var update = new Promise(function(avatarURL, userID) {
+                    var update = new Promise(function(avatarURL) {
                         xhr2.open('PUT', response.returnData.url);
                         xhr2.onreadystatechange = () => {
                             if(xhr2.readyState === 4) {
@@ -148,31 +149,33 @@ class Profile extends Component {
                         }
                         xhr2.send(file);
                         avatarURL(response.returnData.url);
+                        setTimeout(function() {
+                            update.then(async function(avatarURL) {
+                                var updated = false;
+                                var _errors = false;
+                                axios.put('/server/users/' + userID + '/upload', {
+                                    token: token,
+                                    avatar: avatarURL
+                                })
+                                .then(function(response) {
+                                    console.log(response)
+                                    if(response.data.updated) {
+                                        updated = true;
+                                        window.location.reload();
+                                    }
+                                })
+                                .catch(function(errors) {
+                                    _errors = true;
+                                });
+                               /* this.setState({
+                                    updated: updated,
+                                    errors: _errors
+                                });*/
+                                
+                            });
+                        }, 3000);
                     });
-                    update.then(async function(avatarURL) {
-                        var updated = false;
-                        var _errors = false;
-                        axios.put('http://localhost:4000/server/users/' + userID + '/upload', {
-                            token: token,
-                            avatar: avatarURL
-                        })
-                        .then(function(response) {
-                            console.log(response)
-                            if(response.data.updated) {
-                                updated = true;
-                                window.location.reload();
-                            }
-                        })
-                        .catch(function(errors) {
-                            console.log(errors);
-                            _errors = true;
-                        });
-                       /* this.setState({
-                            updated: updated,
-                            errors: _errors
-                        });*/
-                        
-                    });
+                    
                 }
                 else {
                     console.log('Errore!');
@@ -228,7 +231,7 @@ class Profile extends Component {
         var noResults = false;
         var _errors = false;
         var password, name, surname, dateOfBirth, registrationDate, email;
-        await axios.post('http://localhost:4000/server/users/' + this.props.userID, {
+        await axios.post('/server/users/' + this.props.userID, {
             token: this.props.token
         })
         .then(function(response) {
@@ -247,7 +250,6 @@ class Profile extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
             this.setState({
@@ -276,7 +278,7 @@ class Profile extends Component {
                 var unauthorized = false;
                 var edited = false;
                 var _errors = false;
-                await axios.put('http://localhost:4000/server/users/' + this.props.userID, {
+                await axios.put('/server/users/' + this.props.userID, {
                     token: this.props.token,
                     oldPassword: this.state.oldPassword,
                     newPassword: this.state.newPassword1,
@@ -299,7 +301,6 @@ class Profile extends Component {
                     }
                 })
                 .catch(function(errors) {
-                    console.log(errors);
                     _errors = true;
                 });
                 this.setState({

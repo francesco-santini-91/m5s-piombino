@@ -17,18 +17,18 @@ class LastElements extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/posts?page=999')
+        await fetch('/server/posts?page=999')
         .then(response => response.json())
         .then((data) => this.setState({lastPosts: data}))
-        .catch(console.log);
-        await fetch('http://localhost:4000/server/events/allEvents?page=999')
+        .catch(console.log('Errore!'));
+        await fetch('/server/events/allEvents?page=999')
         .then(response => response.json())
         .then((data) => this.setState({lastEvents: data}))
-        .catch(console.log);
-        await fetch('http://localhost:4000/server/polls/allPolls?page=999')
+        .catch(console.log('Errore!'));
+        await fetch('/server/polls/allPolls?page=999')
         .then(response => response.json())
         .then((data) => this.setState({lastPolls: data}))
-        .catch(console.log);
+        .catch(console.log('Errore!'));
         this.setState({loaded: true});
     }
 

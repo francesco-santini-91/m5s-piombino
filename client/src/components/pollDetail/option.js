@@ -23,7 +23,7 @@ class Option extends Component {
             var unauthorized = false;
             var noResults = false;
             var _errors = false;
-            await axios.post('http://localhost:4000/server/polls/' + this.props.pollID + '/vote', {
+            await axios.post('/server/polls/' + this.props.pollID + '/vote', {
                 token: this.props.token,
                 optionID: this.props.id
             })
@@ -39,7 +39,6 @@ class Option extends Component {
                     }
                 })
                 .catch(function(errors) {
-                    console.log(errors);
                     _errors = true;
                 });
                 this.setState({

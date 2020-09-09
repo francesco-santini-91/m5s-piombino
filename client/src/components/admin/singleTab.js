@@ -60,7 +60,7 @@ class SingleTab extends Component {
         var unauthorized = false;
         var noResults = false;
         var _errors = false;
-        await axios.put('http://localhost:4000/server/homepageTabs/' + this.props.tabID, {
+        await axios.put('/server/homepageTabs/' + this.props.tabID, {
             token: this.props.token,
             title: this.state.title,
             content: JSON.stringify(convertToRaw(this.state.contentEdited.getCurrentContent()))
@@ -77,7 +77,6 @@ class SingleTab extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({
@@ -97,7 +96,7 @@ class SingleTab extends Component {
         var deleted = false;
         var _errors = false;
         if(this.props.isSuperUser === true) {
-            await axios.patch('http://localhost:4000/server/homepageTabs/' + this.props.tabID, {
+            await axios.patch('/server/homepageTabs/' + this.props.tabID, {
                 token: this.props.token
             })
             .then(function(response) {
@@ -112,7 +111,6 @@ class SingleTab extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({

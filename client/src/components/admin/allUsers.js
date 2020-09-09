@@ -39,7 +39,7 @@ class AllUsers__Admin extends Component {
         var unauthorized = false;
         var noResults = false;
         var _errors = false;
-        await axios.post('http://localhost:4000/server/users', {
+        await axios.post('/server/users', {
             token: this.props.token
         })
         .then(function(response) {
@@ -57,7 +57,6 @@ class AllUsers__Admin extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
             loaded = true;
         });

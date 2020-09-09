@@ -57,7 +57,7 @@ class NewPost extends Component {
             this.setState({noFileSelected: true})
         }
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:4000/server/sign-s3?file-name=' + file.name + '&file-type=' + file.type);
+        xhr.open('GET', '/server/sign-s3?file-name=' + file.name + '&file-type=' + file.type);
         xhr.onreadystatechange = () => {
             if(xhr.readyState === 4) {
                 if(xhr.status === 200) {
@@ -102,7 +102,7 @@ class NewPost extends Component {
             var unauthorized = false;
             var postAlreadyExist = false;
             var _errors = false;
-            await axios.post('http://localhost:4000/server/posts/newPost', {
+            await axios.post('/server/posts/newPost', {
                 token: this.props.token,
                 id: this.state.id,
                 title: this.state.title,
@@ -122,7 +122,6 @@ class NewPost extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({
@@ -139,10 +138,10 @@ class NewPost extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/posts/numberOfPosts')
+        await fetch('/server/posts/numberOfPosts')
         .then(response => response.json())
         .then((data) => this.setState({id: data.totalPosts}))
-        .catch(console.log);
+        .catch(console.log('Errore!'));
     }
 
     render() {

@@ -89,7 +89,7 @@ class Event extends Component {
         var unauthorized = false;
         var noResults = false;
         var _errors = false;
-        await axios.put('http://localhost:4000/server/events/' + this.props.eventID, {
+        await axios.put('/server/events/' + this.props.eventID, {
             token: this.props.token,
             data: this.state.data,
             location: this.state.location,
@@ -107,7 +107,6 @@ class Event extends Component {
             }
         })
         .catch(function(errors) {
-            console.log(errors);
             _errors = true;
         });
         this.setState({
@@ -126,7 +125,7 @@ class Event extends Component {
         var deleted = false;
         var _errors = false;
         if(this.props.isSuperUser === true || this.props.username === this.props.author) {
-            await axios.patch('http://localhost:4000/server/events/' + this.props.eventID, {
+            await axios.patch('/server/events/' + this.props.eventID, {
                 token: this.props.token
             })
             .then(function(response) {
@@ -138,7 +137,6 @@ class Event extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({

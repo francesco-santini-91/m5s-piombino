@@ -22,14 +22,14 @@ class AllEvents extends Component {
     }
 
     async componentDidMount() {
-        await fetch('http://localhost:4000/server/events/allEvents'+this.props.location.search)
+        await fetch('/server/events/allEvents'+this.props.location.search)
         .then(response => response.json())
         .then((data) => this.setState({events: data}))
-        .catch(console.log);
-        await fetch('http://localhost:4000/server/events/numberOfAllEvents')
+        .catch(console.log('Errore!'));
+        await fetch('/server/events/numberOfAllEvents')
         .then(response => response.json())
         .then((data) => this.setState({total: data.totalEvents}))
-        .catch(console.log);
+        .catch(console.log('Errore!'));
         this.setState({loaded: true});
     }
 

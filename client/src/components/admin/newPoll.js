@@ -124,7 +124,7 @@ class NewPoll extends Component {
             var unauthorized = false;
             var pollAlreadyExist = false;
             var _errors = false;
-            await axios.post('http://localhost:4000/server/polls/newPoll', {
+            await axios.post('/server/polls/newPoll', {
                 token: this.props.token,
                 title: this.state.title,
                 content: JSON.stringify(convertToRaw(this.state.content.getCurrentContent())),
@@ -143,7 +143,6 @@ class NewPoll extends Component {
                 }
             })
             .catch(function(errors) {
-                console.log(errors);
                 _errors = true;
             });
             this.setState({
