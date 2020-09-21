@@ -5,6 +5,11 @@ const jwt = require('jsonwebtoken');
 var postsPerPage = 5;
 
 exports.getPostsList = async function(request, response, next) {
+    /*
+     *  La funzione invia al client una lista di comunicati: se la pagina richiesta nell'URL è '999' significa che
+     *  i cominicati saranno visualizzati nella homepage del sito, e verranno inviati gli ultimi 3 pubblicati.
+     *  Se la pagina richiesta è una qualsiasi altra, verranno inviati 5 comunicati, scartando quelli delle pagine precedenti.
+     */
     if(request.query.page == 999) {
         postsPerPage = 3;
         request.query.page = 1;
@@ -31,6 +36,9 @@ exports.getPostsList = async function(request, response, next) {
 }
 
 exports.getNumberOfTotalPosts = async function(request, response, next) {
+    /*
+     *  Per consentire la creazione dei link di PAGINATION, il server comunica il totale dei comunicati presenti nel Database.
+     */
     await Post
         .countDocuments({})
         .exec(function(errors, count) {
@@ -42,6 +50,9 @@ exports.getNumberOfTotalPosts = async function(request, response, next) {
 }
 
 exports.getPostDetail = async function(request, response, next) {
+    /*
+     *  Viene restituito il comunicato richiesto tramite URL.
+     */
     await Post
         .findOne({'urlTitle': request.params.urlTitle})
         .populate('comments')
@@ -59,6 +70,10 @@ exports.getPostDetail = async function(request, response, next) {
 }
 
 exports.createPost = async function(request, response, next) {
+    /*
+     *  Viene creato un nuovo comunicato, solo se chi lo crea è un utente ADMIN.
+     *  Prima del salvataggio, viene creato l'url, modificando il titolo scelto dall'utente (rimpiazzando spazi e caratteri speciali).
+     */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
@@ -107,6 +122,9 @@ exports.createPost = async function(request, response, next) {
 }
 
 exports.editPost = async function(request, response, next) {
+    /*
+     *  La modifica del comunicato avviene esclusivamente da parte dell'utente che lo ha pubblicato o da un utente SUPER USER.
+     */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
@@ -153,6 +171,10 @@ exports.editPost = async function(request, response, next) {
 }
 
 exports.verifyLikeToPost = async function(request, response, next) {
+    /*
+     *  Verifica se l'utente autenticato ha già cliccato il like al comunicato, verificando se l'ID UTENTE è
+     *  presente nell'array dei likes relativi al comunicato.
+     */
     await Post
         .findOne({ $and: [{'urlTitle': request.params.urlTitle}, {likes: request.body.userID}]})
         .exec(function(errors, results) {
@@ -169,6 +191,9 @@ exports.verifyLikeToPost = async function(request, response, next) {
 }
 
 exports.likeToPost = async function(request, response, next) {
+    /*
+     *  L' ID UTENTE viene salvato nell' array dei likes del comunicato.
+     */
     await Post
         .findOne({'urlTitle': request.params.urlTitle})
         .exec(async function(errors, results) {
@@ -191,6 +216,9 @@ exports.likeToPost = async function(request, response, next) {
 }
 
 exports.verifyLikeToComment = async function(request, response, next) {
+    /*
+     *  Stessa verifica dei like ai post, ma relativa ai commenti.
+     */
     await Comment
         .findOne({ $and: [{'_id': request.params.commentID}, {likes: request.body.userID}]})
         .exec(function(errors, results) {
@@ -229,6 +257,9 @@ exports.likeToComment = async function(request, response, next) {
 }
 
 exports.commentToPost = async function(request, response, next) {
+    /*
+     *  Il commento scritto da un utente (CONFERMATO e NON BANNATO) viene salvato nell'array dei commenti del post.
+     */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
@@ -273,6 +304,9 @@ exports.commentToPost = async function(request, response, next) {
 }
 
 exports.editComment = async function(request, response, next) {
+    /*
+     *  Esclusivamente l'autore del commento o un utente SUPER USER possono modificare il contenuto di un commento.
+     */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
@@ -309,6 +343,9 @@ exports.editComment = async function(request, response, next) {
 }
 
 exports.deleteComment = async function(request, response, next) {
+    /*
+     *  Esclusivamente l'autore del commento o un utente SUPER USER possono eliminare un commento.
+     */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
@@ -345,6 +382,9 @@ exports.deleteComment = async function(request, response, next) {
 }
 
 exports.deletePost = async function(request, response, next) {
+    /*
+     *  Esclusivamente l'autore del comunicato o un utente SUPER USER possono eliminare il comunicato.
+     */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
