@@ -5,6 +5,11 @@ const bcryptjs = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
 exports.getUsersList = async function(request, response, next) {
+    /* 
+     *  Il server invia al client la lista degli utenti registrati.
+     *  Se chi ne fa richiesta è un utente ADMIN o SUPER USER, riceverà informazioni più dettagliate, altrimenti 
+     *  solamente lo USERNAME, l'AVATAR, le generalità e la DATA DI NASCITA.
+    */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
@@ -15,7 +20,7 @@ exports.getUsersList = async function(request, response, next) {
         else if(decoded.isSuperUser == true || decoded.isAdmin == true) {
             await User
                 .find({}, 'username avatar name surname dateOfBirth email registrationDate isConfirmed isAdmin isSuperUser isBanned')
-                .sort({'isSuperUser': -1, 'isAdmin': -1, 'isConfirmed': -1, 'isBanned': -1, 'username': 1 })
+                .sort({'isSuperUser': -1, 'isAdmin': -1, 'isConfirmed': -1, 'isBanned': -1, 'username': 1 })    // Gli utenti vengono ordinati in base ai diritti.
                 .exec(function(errors, results) {
                     if(errors) {
                         return next(errors);
@@ -47,6 +52,9 @@ exports.getUsersList = async function(request, response, next) {
 }
 
 exports.getUserDetails = async function(request, response, next) {
+    /*
+     *  Le informazioni meno sensibili di un preciso utente registrato vengono rese disponibili tramite GET
+     */
     await User
         .findOne({'_id': request.params.userID}, 'username avatar name surname dateOfBirth')
         .exec(function(errors, results) {
@@ -63,11 +71,15 @@ exports.getUserDetails = async function(request, response, next) {
 }
 
 exports.getUserDetails__POST = async function(request, response, next) {
+    /*
+     *  Le informazioni più dettagliate di un preciso utente vengono inviate previa autenticazione da parte del richiedente.
+     */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
         }
         if(decoded.isBanned == true) {
+            /*   Se l'utente richiedente risulta BANNATO, non riceverà le informazioni richieste.   */
             response.json({unauthorized: true});
         }
         else {
@@ -90,6 +102,9 @@ exports.getUserDetails__POST = async function(request, response, next) {
 }
 
 exports.getPostsByUser = async function(request, response, next) {
+    /* 
+     *  Funzione per il raggruppamento dei comunicati dello stesso utente, ** NON IMPLEMENTATA LATO FRONT END **
+     */
     await Post
         .find({'author': request.params.username})
         .exec(function(errors, results) {
@@ -106,6 +121,11 @@ exports.getPostsByUser = async function(request, response, next) {
 }
 
 exports.createNewUser = async function(request, response, next) {
+    /*  
+     *  Creazione di un nuovo utente a seguito di una registrazione sul sito.
+     *  Viene verificata l'eventuale preesistenza dello stesso USERNAME e/o della stessa EMAIL, in caso di esito negativo
+     *  si procede con l'invio alla casella email indicata dal registrante di un token necessario alla conferma dell'account.
+     */
     await User
         .findOne({ $or: [{'username': request.body.username}, {'email': request.body.email}]})
         .exec(async function(errors, results) {
@@ -181,6 +201,9 @@ exports.createNewUser = async function(request, response, next) {
 }
 
 exports.resendEmail = async function(request, response, next) {
+    /* 
+     *  Procedura per l'invio di una nuova email necessaria all'attivazione dell'account utente.
+     */
     jwt.verify(request.body.token, process.env.SECRET_KEY, async function(errors, decoded) {
         if(errors) {
             return next(errors);
@@ -239,6 +262,11 @@ exports.resendEmail = async function(request, response, next) {
 }
 
 exports.resetPassword = async function(request, response, next) {
+    /* 
+     *  In caso di smarrimento della password, l'utente, inserendo l'indirizzo email utilizzato durante la registrazione
+     *  potrà ricevere un token di autenticazione (dalla validità di 60 minuti) con il quale potrà procedere con
+     *  l'inserimento di una nuova password.
+     */
     await User
         .findOne({'email': request.body.email})
         .exec(function(errors, results) {
@@ -287,6 +315,9 @@ exports.resetPassword = async function(request, response, next) {
 }
 
 exports.restorePassword = async function(request, response, next) {
+    /*
+     *  La modifica vera e propria della password, dopo aver ricevuto il token di autenticazione 
+     */
     await User
         .findOne({'username': request.body.username})
         .exec(async function(errors, results) {
@@ -319,6 +350,10 @@ exports.restorePassword = async function(request, response, next) {
 }
 
 exports.updateAvatar = async function(request, response, next) {
+    /*
+     *  Alla modifica dell'avatar utente, viene salvato nel database l'URL della nuova immagine.
+     *
+     */
     await User
         .findOne({'_id': request.params.userID})
         .exec(async function(errors, results) {
@@ -346,6 +381,10 @@ exports.updateAvatar = async function(request, response, next) {
 }
 
 exports.editUser = async function(request, response, next) {
+    /*
+     *  L'utente potrà autonomamente modificare il proprio AVATAR e la propria PASSWORD, mentre per quanto riguarda
+     *  l'indirizzo EMAIL e i diritti di lettura/scrittura sul sito sono editabili esclusivamente da un SUPER USER.
+     */
     await User
         .findOne({'_id': request.params.userID})
         .exec(async function(errors, results) {
@@ -419,6 +458,9 @@ exports.editUser = async function(request, response, next) {
 }
 
 exports.deleteUser = async function(request, response, next) {
+    /*
+     *  Eliminazione di un account utente, possibile o dall'utente stesso o da un utente SUPER USER.
+     */
     await User
         .findOne({'_id': request.params.userID})
         .exec(async function(errors, results) {
