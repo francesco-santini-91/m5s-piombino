@@ -8,7 +8,7 @@ const { body, validationResult } = require('express-validator');
 router.post('/', usersController.getUsersList);
 
 router.post('/register', [
-    body('username').trim().escape(),
+    body('username').trim().escape(),   // Sanificazione input form
     body('name').trim(). escape(),
     body('surname').trim().escape(),
     body('email').trim().escape(),
